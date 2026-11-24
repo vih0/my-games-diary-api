@@ -12,7 +12,11 @@ import { ListsService } from './lists/lists.service';
     {
       provide: Database,
       useFactory: async () => {
-        const db = new Database(process.env.DB_PATH ?? 'data/my-games-diary.sqlite', process.env.DATABASE_URL);
+        const databaseUrl = process.env.DATABASE_URL?.trim();
+        if (process.env.RAILWAY_ENVIRONMENT_ID && !databaseUrl) {
+          throw new Error('Configure DATABASE_URL nas variáveis do serviço no Railway.');
+        }
+        const db = new Database(process.env.DB_PATH ?? 'data/my-games-diary.sqlite', databaseUrl);
         try {
           await db.query('SELECT platform, genre, rating, image_url, notes, cover_type FROM games LIMIT 0');
           return db;

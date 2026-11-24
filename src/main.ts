@@ -24,8 +24,9 @@ async function bootstrap() {
   app.useGlobalFilters(new ApiErrorFilter());
   if (process.env.CORS_ORIGIN) app.enableCors({ origin: process.env.CORS_ORIGIN });
   app.enableShutdownHooks();
-  await app.listen(port, '127.0.0.1');
-  Logger.log(`MyGamesDiary disponível em http://127.0.0.1:${port}/api`, 'Bootstrap');
+  const host = process.env.RAILWAY_ENVIRONMENT_ID ? '0.0.0.0' : '127.0.0.1';
+  await app.listen(port, host);
+  Logger.log(`MyGamesDiary disponível em http://${host}:${port}/api`, 'Bootstrap');
 }
 
 void bootstrap().catch((error: unknown) => {

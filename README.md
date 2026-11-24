@@ -123,3 +123,9 @@ npm.cmd start
 ```
 
 `db:setup` cria as tabelas no esquema privado `my_games_diary`. O passo `db:import` é opcional e requer o arquivo SQLite existente. Ele copia jogos, capas, listas e vínculos em uma transação, mantendo os IDs, o arquivo de origem e os registros que já existem no destino. Sem `DATABASE_URL`, a API continua usando SQLite. A API é de uso local e continua ligada a `127.0.0.1`; conectar o banco ao Supabase não adiciona login ao diário.
+
+## Deploy no Railway
+
+Use Node.js 24 ou superior, `npm run build` para compilar e `npm start` para iniciar. O servidor usa o `PORT` do Railway e escuta em `0.0.0.0` quando `RAILWAY_ENVIRONMENT_ID` está presente. Fora do Railway ele escuta em `127.0.0.1`.
+
+Em **Variables**, configure `DATABASE_URL` com a URI PostgreSQL do Supabase. O deploy exige essa variável para evitar gravar no SQLite do contêiner. Se o frontend estiver em outro domínio, configure `CORS_ORIGIN` com a origem exata dele. Para verificar a API, use `GET /api/games`.
